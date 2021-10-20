@@ -40,5 +40,3 @@ export function getCityName(event) {
       });
   }
 }
-
-document.getElementById("generate").addEventListener("click", getCityName);
