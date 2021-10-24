@@ -49,7 +49,6 @@ app.post("/geo", async function (req, res) {
     const flagResponse = await fetch(
       `https://restcountries.com/v3.1/alpha?codes=${data.geonames[0].countryCode}`
     );
-    console.log(data.geonames[0].countryCode);
     const flagData = await flagResponse.json();
 
     const cityData = {

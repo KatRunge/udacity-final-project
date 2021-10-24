@@ -9,8 +9,6 @@ export function getCityName(event) {
   } else if (!cityResult) {
     alert("Enter a city name");
   } else {
-    console.log("asldkfl" + inputDate);
-
     fetch("http://localhost:8081/geo", {
       method: "POST",
       credentials: "same-origin",
@@ -26,8 +24,12 @@ export function getCityName(event) {
           document.getElementById(
             "date"
           ).innerHTML = `Your trip is on: ${inputDate}`;
-          document.getElementById("latitud").innerHTML = `latitud: ${res.latitud}`;
-          document.getElementById("longitud").innerHTML = `longitud: ${res.long}`;
+          document.getElementById(
+            "latitud"
+          ).innerHTML = `latitud: ${res.latitud}`;
+          document.getElementById(
+            "longitud"
+          ).innerHTML = `longitud: ${res.long}`;
           document.getElementById(
             "timeZone"
           ).innerHTML = `<p>Temperature: ${res.temperature}, ${res.timezone}</p>`;
