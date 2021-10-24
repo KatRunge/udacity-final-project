@@ -46,6 +46,12 @@ app.post("/geo", async function (req, res) {
     );
     const imageData = await imageResponse.json();
 
+    const flagResponse = await fetch(
+      `https://restcountries.com/v3.1/alpha?codes=${data.geonames[0].countryCode}`
+    );
+    console.log(data.geonames[0].countryCode);
+    const flagData = await flagResponse.json();
+
     const cityData = {
       latitud: data.geonames[0].lat,
       long: data.geonames[0].lng,
@@ -54,14 +60,10 @@ app.post("/geo", async function (req, res) {
       timezone: weatherData.data[0].timezone,
       temperature: weatherData.data[0].temp,
       backgroundImage: imageData.hits[0].largeImageURL,
+      flag: flagData[0].flag,
     };
-
     res.send(cityData);
   } catch (error) {
     console.log("error", error);
   }
-
 });
-
-
-

@@ -22,12 +22,12 @@ export function getCityName(event) {
         try {
           document.getElementById(
             "entry-title"
-          ).innerHTML = `<h2>Your trip to: ${res.name}, ${res.country}</h2>`;
+          ).innerHTML = `<h2>Your trip to: ${res.name}, ${res.country}, ${res.flag}</h2>`;
           document.getElementById(
             "date"
           ).innerHTML = `Your trip is on: ${inputDate}`;
-          document.getElementById("latitud").innerHTML = `${res.latitud}`;
-          document.getElementById("longitud").innerHTML = `${res.long}`;
+          document.getElementById("latitud").innerHTML = `latitud: ${res.latitud}`;
+          document.getElementById("longitud").innerHTML = `longitud: ${res.long}`;
           document.getElementById(
             "timeZone"
           ).innerHTML = `<p>Temperature: ${res.temperature}, ${res.timezone}</p>`;
