@@ -20,7 +20,12 @@ app.get("/", function (req, res) {
 });
 
 const cors = require("cors");
-app.use(cors());
+
+app.use(
+  cors({
+    origin: ["http://localhost:8080", "http://localhost:8081"]
+  })
+);
 
 // designates what port the app will listen to for incoming requests
 app.listen(8081, function () {
