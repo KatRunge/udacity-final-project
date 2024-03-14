@@ -9,13 +9,19 @@ export function getCityName(event) {
   } else if (!cityResult) {
     alert("Enter a city name");
   } else {
-    fetch("http://localhost:8081/geo", {
-      method: "POST",
+    fetch(`http://localhost:8081/geo?city=${cityResult}&date=${inputDate}`, {
       credentials: "same-origin",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: cityResult }),
+      // Body is not allowed for GET requests
+      // body: JSON.stringify({ data: cityResult, dataDate: inputDate }),
     })
-      .then((res) => res.json())
+      .then(function (res) {
+        try {
+          return res.json();
+        } catch (error) {
+          console.log("error", error);
+        }
+      })
       .then(function (res) {
         try {
           document.getElementById(

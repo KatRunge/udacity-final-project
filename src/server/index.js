@@ -23,7 +23,7 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: ["http://localhost:8080", "http://localhost:8081"]
+    origin: "http://localhost:8080"
   })
 );
 
@@ -32,8 +32,11 @@ app.listen(8081, function () {
   console.log("Example app listening on port 8081!");
 });
 
-app.post("/geo", async function (req, res) {
-  const city = req.body.data;
+app.get("/geo", async function (req, res) {
+  const city = req.query.city;
+  const date = req.query.date;
+
+  console.log(date);
 
   try {
     const mainUrl = await fetch(
@@ -42,9 +45,12 @@ app.post("/geo", async function (req, res) {
     const data = await mainUrl.json();
 
     const weatherResponse = await fetch(
-      `https://api.weatherbit.io/v2.0/current?lat=${data.geonames[0].lat}&lon=${data.geonames[0].lng}&key=${weatherKey}`
+      `https://api.weatherbit.io/v2.0/forecast/daily?lat=${data.geonames[0].lat}&lon=${data.geonames[0].lng}&key=${weatherKey}`
     );
-    const weatherData = await weatherResponse.json();
+    const weatherbitForecasts = await weatherResponse.json();
+    // weatherbitForecasts is an array with 16 elements, extract the correct element into weatherData
+    // hint: you can always use console.log to debug
+    const weatherData = weatherbitForecasts['number'];
 
     const imageResponse = await fetch(
       `https://pixabay.com/api/?key=${pixaKey}&q=${city}&image_type=photo`
