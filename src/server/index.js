@@ -23,7 +23,7 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: "http://localhost:8080"
+    origin: "http://localhost:8080",
   })
 );
 
@@ -48,9 +48,13 @@ app.get("/geo", async function (req, res) {
       `https://api.weatherbit.io/v2.0/forecast/daily?lat=${data.geonames[0].lat}&lon=${data.geonames[0].lng}&key=${weatherKey}`
     );
     const weatherbitForecasts = await weatherResponse.json();
-    // weatherbitForecasts is an array with 16 elements, extract the correct element into weatherData
-    // hint: you can always use console.log to debug
-    const weatherData = weatherbitForecasts['number'];
+    const getTemps = weatherbitForecasts.data.map((day, index) => {
+      if (day.valid_date === date) {
+        return index;
+      }
+    });
+
+    const weatherData = weatherbitForecasts.data[getTemps];
 
     const imageResponse = await fetch(
       `https://pixabay.com/api/?key=${pixaKey}&q=${city}&image_type=photo`
@@ -67,11 +71,13 @@ app.get("/geo", async function (req, res) {
       long: data.geonames[0].lng,
       name: data.geonames[0].name,
       country: data.geonames[0].countryName,
-      timezone: weatherData.data[0].timezone,
-      temperature: weatherData.data[0].temp,
+      timezone: weatherbitForecasts.timezone,
+      temperature: weatherData.temp,
       backgroundImage: imageData.hits[0].largeImageURL,
       flag: flagData[0].flag,
+      date: weatherData.valid_date,
     };
+
     res.send(cityData);
   } catch (error) {
     console.log("error", error);

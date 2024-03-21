@@ -4,6 +4,8 @@ export function getCityName(event) {
   const cityResult = document.getElementById("cityName").value;
   const inputDate = document.getElementById("travelDate").value;
 
+  const reverseDate = inputDate.split("-").reverse().join("-");
+
   if (!inputDate) {
     alert("Enter a date");
   } else if (!cityResult) {
@@ -12,8 +14,6 @@ export function getCityName(event) {
     fetch(`http://localhost:8081/geo?city=${cityResult}&date=${inputDate}`, {
       credentials: "same-origin",
       headers: { "Content-Type": "application/json" },
-      // Body is not allowed for GET requests
-      // body: JSON.stringify({ data: cityResult, dataDate: inputDate }),
     })
       .then(function (res) {
         try {
@@ -29,7 +29,7 @@ export function getCityName(event) {
           ).innerHTML = `<h2>Your trip to: ${res.name}, ${res.country}, ${res.flag}</h2>`;
           document.getElementById(
             "date"
-          ).innerHTML = `Your trip is on: ${inputDate}`;
+          ).innerHTML = `Your trip is on: ${reverseDate}`;
           document.getElementById(
             "latitud"
           ).innerHTML = `latitud: ${res.latitud}`;
