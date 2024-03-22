@@ -35,9 +35,6 @@ app.listen(8081, function () {
 app.get("/geo", async function (req, res) {
   const city = req.query.city;
   const date = req.query.date;
-
-  console.log(date);
-
   try {
     const mainUrl = await fetch(
       `http://api.geonames.org/searchJSON?q=${city}&maxRows=1&username=${geoUser}`
@@ -48,13 +45,13 @@ app.get("/geo", async function (req, res) {
       `https://api.weatherbit.io/v2.0/forecast/daily?lat=${data.geonames[0].lat}&lon=${data.geonames[0].lng}&key=${weatherKey}`
     );
     const weatherbitForecasts = await weatherResponse.json();
-    const getTemps = weatherbitForecasts.data.map((day, index) => {
-      if (day.valid_date === date) {
-        return index;
-      }
+    const getDays = weatherbitForecasts.data.map((day) => {
+      return day.valid_date;
     });
 
-    const weatherData = weatherbitForecasts.data[getTemps];
+    const getDayIndex = getDays.indexOf(date);
+
+    const weatherData = weatherbitForecasts.data[getDayIndex];
 
     const imageResponse = await fetch(
       `https://pixabay.com/api/?key=${pixaKey}&q=${city}&image_type=photo`
