@@ -34,7 +34,7 @@ app.listen(8081, function () {
 
 app.get("/geo", async function (req, res) {
   const city = req.query.city;
-  const date = req.query.date;
+  // const date = req.query.date;
   try {
     const mainUrl = await fetch(
       `http://api.geonames.org/searchJSON?q=${city}&maxRows=1&username=${geoUser}`
@@ -49,9 +49,16 @@ app.get("/geo", async function (req, res) {
       return day.valid_date;
     });
 
-    const getDayIndex = getDays.indexOf(date);
+    const showDays = getDays.map((day) => {
+      return day;
+    });
 
-    const weatherData = weatherbitForecasts.data[getDayIndex];
+    const getTemp = weatherbitForecasts.data.map((day) => {
+      return day.temp;
+    });
+
+    console.log(showDays);
+    // const weatherData = weatherbitForecasts.data;
 
     const imageResponse = await fetch(
       `https://pixabay.com/api/?key=${pixaKey}&q=${city}&image_type=photo`
@@ -68,11 +75,10 @@ app.get("/geo", async function (req, res) {
       long: data.geonames[0].lng,
       name: data.geonames[0].name,
       country: data.geonames[0].countryName,
-      timezone: weatherbitForecasts.timezone,
-      temperature: weatherData.temp,
+      temperature: getTemp,
       backgroundImage: imageData.hits[0].largeImageURL,
       flag: flagData[0].flag,
-      date: weatherData.valid_date,
+      date: showDays,
     };
 
     res.send(cityData);
